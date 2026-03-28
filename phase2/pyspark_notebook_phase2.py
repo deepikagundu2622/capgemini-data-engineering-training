@@ -12,22 +12,17 @@ orders_data = [(101, 1, 2500, "2026-03-01"),
                (105, 5, 2800, "2026-03-05")]
 customers = spark.createDataFrame(customers_data, ["customer_id", "customer_name", "city", "age"])
 orders = spark.createDataFrame(orders_data, ["order_id", "customer_id", "amount", "order_date"])
+--1
 orders.groupBy("customer_id").sum("amount").show()
-orders.groupBy("customer_id") \ 
-      .sum("amount") \
-      .orderBy("sum(amount)", ascending=False) \
-      .show(3)
+--2
+orders.groupBy("customer_id").sum("amount").orderBy("sum(amount)", ascending=False).show(3)
+--3
 customers.join(orders, "customer_id", "left_anti").show()
-customers.join(orders, "customer_id") \
-    .groupBy("city") \
-    .sum("amount") \
-    .show()
+--4
+customers.join(orders, "customer_id").groupBy("city").sum("amount").show()
+--5
 orders.groupBy("customer_id").avg("amount").show()
-orders.groupBy("customer_id") \
-      .count() \
-      .filter("count > 1") \
-      .show()
-orders.groupBy("customer_id") \
-      .sum("amount") \
-      .orderBy("sum(amount)", ascending=False) \
-      .show()
+--6
+orders.groupBy("customer_id").count().filter("count > 1").show()
+--7
+orders.groupBy("customer_id").sum("amount").orderBy("sum(amount)", ascending=False).show()
